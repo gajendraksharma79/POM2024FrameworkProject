@@ -1,15 +1,11 @@
 package com.qa.opencart.tests;
 
 import org.testng.Assert;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.qa.opencart.base.BaseTest;
 import com.qa.opencart.constants.AppConstants;
 import com.qa.opencart.errors.AppError;
-import com.qa.opencart.listeners.AnnotationTransformer;
-import com.qa.opencart.listeners.ExtentReportListener;
-import com.qa.opencart.listeners.TestAllureListener;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -29,11 +25,11 @@ public class LoginPageTest extends BaseTest{
 	
 	
 	
-	@Description("Checking the Title of Login Page----")
+	@Description("Checking the Title of Login Page TESTGJ----")
 	@Severity(SeverityLevel.MINOR)
 	@Owner("Gajendra")
 	@Feature("Login Title feature")
-	@Issue("UGMVPDEV-1131")
+	@Issue("UGMVPDEV-1131-GJ")
 	@Test(priority = 1)
 	public void loginPageTitleTest() {
 		String actualTitle = loginPage.getLoginPageTitle();
