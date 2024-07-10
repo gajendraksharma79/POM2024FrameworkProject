@@ -8,4 +8,10 @@ public class AddToCart {
 		System.out.println("Product Added"+productToAdd);
 	}
 	
+	public void addDeliveryAddress() {
+		System.out.println("Delivery Address");
+	}
+	public void addPaymentMethod() {
+		System.out.println("Payment Method");
+	}
 }
