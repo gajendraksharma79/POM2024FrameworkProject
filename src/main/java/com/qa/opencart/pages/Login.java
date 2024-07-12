@@ -8,5 +8,8 @@ public class Login {
 	public void main() {
 		System.out.println("Main --- Gajendra");
 	}
-
+	
+	public void doLogin() {
+		System.out.println("gajendra--- Login");
+	}
 }
