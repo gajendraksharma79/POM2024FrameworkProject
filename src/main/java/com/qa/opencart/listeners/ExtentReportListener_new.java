@@ -18,7 +18,7 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.qa.opencart.factory.DriverFactory;
 
 
-public class ExtentReportListener implements ITestListener {
+public class ExtentReportListener_new implements ITestListener {
 
 	private static final String OUTPUT_FOLDER = "./reports/";
 	private static final String FILE_NAME = "TestExecutionReport.html";
