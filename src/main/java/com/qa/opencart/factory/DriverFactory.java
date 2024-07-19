@@ -40,9 +40,9 @@ public class DriverFactory {
 	public WebDriver initDriver(Properties prop) {
 		// cross browser logic
 
-		//String browserName = prop.getProperty("browser");
+		String browserName = prop.getProperty("browser");
 		//following code is written to read the browserName from configured variable in Jenkins job
-		String browserName = System.getProperty("browserName");
+		//String browserName = System.getProperty("browserName");
 		String url = prop.getProperty("url");
 		optionsmanager = new OptionsManager(prop);
 		System.out.println("browser name is :" + browserName);
