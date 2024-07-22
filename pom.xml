@@ -127,8 +127,9 @@
 					<forkCount>3</forkCount>
 					<reuseForks>true</reuseForks>
 					<suiteXmlFiles>
-						<suiteXmlFile>
-							src/test/resources/testrunners/test_regression.xml</suiteXmlFile>
+						<!--<suiteXmlFile>
+							src/test/resources/testrunners/test_regression.xml</suiteXmlFile>-->
+						<suiteXmlFile>${suiteXmlFile}</suiteXmlFile> <!--variabole ${suiteXmlFile} will pick the suite .xml file which we are passing thru our pipeline script like regresstion or sanity -->
 					</suiteXmlFiles>
 
 					<argLine>
