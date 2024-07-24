@@ -10,7 +10,6 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.io.FileHandler;
@@ -25,59 +24,52 @@ public class DriverFactory {
 
 	WebDriver driver;
 	Properties prop;
-	OptionsManager optionsmanager;
+	OptionsManager optionsManager;
 	
-	public static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<WebDriver>();
 	public static String highlight;
 	
+	public static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<WebDriver>();
 
 	/**
-	 * This method is used to initialize the driver on the basis of given browser
-	 * name
+	 * This is used to init the driver on the basis on given browser name.
 	 * 
 	 * @param browserName
 	 */
 	public WebDriver initDriver(Properties prop) {
-		// cross browser logic
-
 		String browserName = prop.getProperty("browser");
-		//following code is written to read the browserName from configured variable in Jenkins job
-		//String browserName = System.getProperty("browserName");
-		String url = prop.getProperty("url");
-		optionsmanager = new OptionsManager(prop);
-		System.out.println("browser name is :" + browserName);
+		System.out.println("browser name is : " + browserName);
+		
 		highlight = prop.getProperty("highlight");
-		switch (browserName.toLowerCase().trim()) {
-		case "chrome":
-			//driver = new ChromeDriver();
-			tlDriver.set(new ChromeDriver(optionsmanager.getChromeOptions()));
-			break;
+		
+		optionsManager = new OptionsManager(prop);
 
+		switch (browserName.toLowerCase().trim()) {
+		case "chrome":			
+			tlDriver.set(new ChromeDriver(optionsManager.getChromeOptions()));
+			break;
 		case "firefox":
-			//driver = new FirefoxDriver();
-			tlDriver.set(new FirefoxDriver(optionsmanager.getFirefoxOptions()));
+			tlDriver.set(new FirefoxDriver(optionsManager.getFirefoxOptions()));
 			break;
 		case "edge":
-			//driver = new EdgeDriver();
-			tlDriver.set(new EdgeDriver(optionsmanager.getEdgeOptions()));
+			tlDriver.set(new EdgeDriver(optionsManager.getEdgeOptions()));
 			break;
 		case "safari":
-			//driver = new SafariDriver();
 			tlDriver.set(new SafariDriver());
 			break;
 
 		default:
-			System.out.println("please pass the riht browser name :" + browserName);
+			System.out.println("plz pass the right browser name..." + browserName);
 			throw new BrowserException(AppError.BROWSER_NOT_FOUND);
-
 		}
 		
 		getDriver().manage().deleteAllCookies();
 		getDriver().manage().window().maximize();
-		getDriver().get(url);
-		return getDriver();
-	}
+		getDriver().get(prop.getProperty("url"));// loginPage
 
+		return getDriver();
+
+	}
+	
 	/**
 	 * get the local thread copy of the driver
 	 * @return
@@ -85,82 +77,109 @@ public class DriverFactory {
 	public static WebDriver getDriver() {
 		return tlDriver.get();
 	}
-	
-	
+
 	/**
-	 * This method is used to initialize the properties from the .properties file
+	 * this is used to init the properties from the .properties file
 	 * 
-	 * @return : this returns properties (prop)
+	 * @return this returns properties (prop)
 	 */
 	public Properties initProp() {
-		// mvn clean install -Denv="qa'
 		prop = new Properties();
-		FileInputStream fis = null;
+		FileInputStream ip = null;
+		// mvn clean install -Denv="qa"
+		// mvn clean install
+
 		String envName = System.getProperty("env");
-		System.out.println("running test suite on env ---> " + envName);
+		System.out.println("running test suite on env--->" + envName);
+
 		if (envName == null) {
-			System.out.println("env name is null, hence running it on QA environment");
+			System.out.println("env name is not given, hence running it on QA environment....");
 			try {
-				fis = new FileInputStream(AppConstants.CONFIG_QA_FILE_PATH);
+				ip = new FileInputStream(AppConstants.CONFIG_QA_FILE_PATH);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-
 		} else {
-
 			try {
-				switch (envName.toLowerCase().trim()) {
+				switch (envName.trim().toLowerCase()) {
 				case "qa":
-					fis = new FileInputStream(AppConstants.CONFIG_QA_FILE_PATH);
+					ip = new FileInputStream(AppConstants.CONFIG_QA_FILE_PATH);
 					break;
-
-				case "dev":
-					fis = new FileInputStream(AppConstants.CONFIG_DEV_FILE_PATH);
-					break;
-
-				case "uat":
-					fis = new FileInputStream(AppConstants.CONFIG_UAT_FILE_PATH);
-					break;
-
 				case "stage":
-					fis = new FileInputStream(AppConstants.CONFIG_STAGE_FILE_PATH);
+					ip = new FileInputStream(AppConstants.CONFIG_STAGE_FILE_PATH);
+					break;
+				case "dev":
+					ip = new FileInputStream(AppConstants.CONFIG_DEV_FILE_PATH);
+					break;
+				case "uat":
+					ip = new FileInputStream(AppConstants.CONFIG_UAT_FILE_PATH);
 					break;
 				case "prod":
-					fis = new FileInputStream(AppConstants.CONFIG_FILE_PATH);
+					ip = new FileInputStream(AppConstants.CONFIG_FILE_PATH);
 					break;
-				default:
-					System.out.println("pleas pass the right env name..." + envName);
-					throw new FrameworkException("====WRONGENVPASSED====");
-				}
 
+				default:
+					System.out.println("please pass the right env name.." + envName);
+					throw new FrameworkException("===WRONGENVPASSED===");
+				}
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
 		try {
-			prop.load(fis);
+			prop.load(ip);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		return prop;
+
 	}
-	
+
+		
 	/**
 	 * take screenshot
 	 */
-			
+	
 	public static String getScreenshot(String methodName) {
-		File srcFile = ((TakesScreenshot)getDriver()).getScreenshotAs(OutputType.FILE); //temp location
-		String path = System.getProperty("user.dir")+"/screenshots/"+methodName+"_"
-						+System.currentTimeMillis()+".png";
-		File destFile = new File(path);
-		try {
-			FileHandler.copy(srcFile, destFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return path;
+		
+		// Get the driver instance
+        TakesScreenshot screenshotTaker = (TakesScreenshot) getDriver();
+        
+        // Take the screenshot and save it to a temporary location
+        File srcFile = screenshotTaker.getScreenshotAs(OutputType.FILE);
+        
+        // Define the path for the screenshots folder
+        String screenshotsDirPath = System.getProperty("user.dir") + "/screenshots";
+        
+        // Create the screenshots folder if it doesn't exist
+        File screenshotsDir = new File(screenshotsDirPath);
+        if (!screenshotsDir.exists()) {
+            if (screenshotsDir.mkdirs()) {
+                System.out.println("Folder 'screenshots' created successfully at: " + screenshotsDirPath);
+            } else {
+                System.out.println("Failed to create the folder 'screenshots' at: " + screenshotsDirPath);
+            }
+        }
+
+        // Define the destination path for the screenshot
+        String screenshotPath = screenshotsDirPath + "/" + methodName + "_" + System.currentTimeMillis() + ".png";
+        File destination = new File(screenshotPath);
+
+        // Copy the screenshot to the destination path
+        try {
+            FileHandler.copy(srcFile, destination);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return destination.getAbsolutePath();
 	}
+	
+	
+	
+	
+	
+	
 }
