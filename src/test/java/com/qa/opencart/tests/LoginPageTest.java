@@ -47,7 +47,7 @@ public class LoginPageTest extends BaseTest{
 		Assert.assertEquals(true, actUrl.contains(AppConstants.LOGIN_PAGE_FRACTION_URL), AppError.URL_NOT_FOUND);
 	}
 	
-	@Description("Checking the Existence of Forgot Password Link----")
+	@Description("Checking the Existence of Forgot Pwd Link----")
 	@Severity(SeverityLevel.CRITICAL)
 	@Owner("Gajendra")
 	@Test(priority = 3)
