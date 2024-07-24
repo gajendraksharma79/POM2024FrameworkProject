@@ -81,12 +81,12 @@ public class ProductInfoPageTest extends BaseTest{
 		System.out.println("========Product Information=======");
 		System.out.println(productInfoMap);
 		softAssert.assertEquals(productInfoMap.get("productname"), "MacBook Pro");//Pass
-		softAssert.assertEquals(productInfoMap.get("Brand"), "Apple11"); //Fail
+		softAssert.assertEquals(productInfoMap.get("Brand"), "Apple"); //Fail
 		softAssert.assertEquals(productInfoMap.get("Product Code"), "Product 18");//Pass
 		softAssert.assertEquals(productInfoMap.get("Reward Points"), "800"); //Pass
-		softAssert.assertEquals(productInfoMap.get("Availability"), "In Stock11	"); //Pass
+		softAssert.assertEquals(productInfoMap.get("Availability"), "In Stock"); //Pass
 		softAssert.assertEquals(productInfoMap.get("productprice"), "$2,000.00"); //Pass
-		softAssert.assertEquals(productInfoMap.get("extaxprice"), "$2,000.0011"); //Pass
+		softAssert.assertEquals(productInfoMap.get("extaxprice"), "$2,000.00"); //Pass
 		softAssert.assertAll(); //will Assert the result of all the softAsserts 
 								//and give Failure Info (1) that how many assertions got failed
 		
